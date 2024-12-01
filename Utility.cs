@@ -1,5 +1,30 @@
 namespace Utility
 {
+    public static class Fs
+    {
+        public static string GetInput(int day)
+        {
+            try
+            {
+                return File.ReadAllText($"./Data/Day{day}/input.txt");
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+        }
+        public static string GetTest(int day)
+        {
+            try
+            {
+                return File.ReadAllText($"./Data/Day{day}/test.txt");
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+        }
+    }
     public static class Quick
     {
         public static IntRange Range(int start, int end)
