@@ -19,7 +19,7 @@ namespace Utility
             {
                 return File.ReadAllText($"./Data/Day{day}/input.txt");
             }
-            catch (Exception e)
+            catch
             {
                 return "";
             }
@@ -30,7 +30,19 @@ namespace Utility
             {
                 return File.ReadAllText($"./Data/Day{day}/test.txt");
             }
-            catch (Exception e)
+            catch
+            {
+                return "";
+            }
+        }
+
+        public static string GetEdgeCases(int day)
+        {
+            try
+            {
+                return File.ReadAllText($"./Data/Day{day}/edge.txt");
+            }
+            catch
             {
                 return "";
             }
