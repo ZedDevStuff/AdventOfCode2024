@@ -1,5 +1,16 @@
 namespace Utility
 {
+    public static class Maths
+    {
+        public static bool WithinInclusive(int value, int min, int max)
+        {
+            return value >= min && value <= max;
+        }
+        public static bool WithinExclusive(int value, int min, int max)
+        {
+            return value > min && value < max;
+        }
+    }
     public static class Fs
     {
         public static string GetInput(int day)

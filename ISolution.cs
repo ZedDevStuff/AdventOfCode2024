@@ -6,11 +6,13 @@ public interface ISolution
     public string Name { get; }
     public void Run()
     {
+        Setup();
         Console.Write("\nWhich part?\n\n> ");
         bool correct = false;
         while(!correct)
         {
-            string input = Console.ReadLine().Trim();
+            string input = Console.ReadLine()?.Trim() ?? "";
+
             if(input == "1")
             {
                 Console.Clear();
@@ -34,6 +36,7 @@ public interface ISolution
             else Console.Write("> ");
         }
     }
+    public void Setup();
     public void Part1();
     public void Part2();
 }
