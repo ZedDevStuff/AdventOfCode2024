@@ -1,116 +1,115 @@
 using System.Text.RegularExpressions;
 
-namespace Extensions
+namespace AdventOfCode2024.Extensions;
+
+public static class Extensions
 {
-    public static class Extensions
+
+    /// <summary>
+    ///  This extension isn't great but it works for my uses
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
+    public static int ParseInt(this string s)
     {
-
-        /// <summary>
-        ///  This extension isn't great but it works for my uses
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        public static int ParseInt(this string s)
+        string result = "";
+        foreach(char c in s)
         {
-            string result = "";
-            foreach(char c in s)
-            {
-                result += char.IsDigit(c) ? c : "";
-            }
-            return int.Parse(result);
+            result += char.IsDigit(c) ? c : "";
         }
+        return int.Parse(result);
+    }
 
-        // This was a char[][] but I wanted to make it more generic for absolutely no reason
-        public static bool HasNeighbor<T>(this T[][] map, int x, int y, params T[] neighbors)
+    // This was a char[][] but I wanted to make it more generic for absolutely no reason
+    public static bool HasNeighbor<T>(this T[][] map, int x, int y, params T[] neighbors)
+    {
+        int xStart = x == 0 ? 0 : x - 1;
+        int xEnd = x == map[0].Length - 1 ? x : x + 1;
+        int yStart = y == 0 ? 0 : y - 1;
+        int yEnd = y == map.Length - 1 ? y : y + 1;
+
+        for (int i = xStart; i <= xEnd; i++)
         {
-            int xStart = x == 0 ? 0 : x - 1;
-            int xEnd = x == map[0].Length - 1 ? x : x + 1;
-            int yStart = y == 0 ? 0 : y - 1;
-            int yEnd = y == map.Length - 1 ? y : y + 1;
-
-            for (int i = xStart; i <= xEnd; i++)
+            for (int j = yStart; j <= yEnd; j++)
             {
-                for (int j = yStart; j <= yEnd; j++)
+                if (i == x && j == y) continue;
+                foreach (T neighbor in neighbors)
                 {
-                    if (i == x && j == y) continue;
-                    foreach (T neighbor in neighbors)
+                    if (map[j][i].Equals(neighbor))
                     {
-                        if (map[j][i].Equals(neighbor))
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
-            return false;
         }
+        return false;
+    }
 
-        // Useful for day 3 part 2 but i literally can't think of any other use case lol
-        public static bool HasNeighborsOut<T>(this T[][] map, int x, int y, out (int x,int y)[] neighboorsCoords, params T[] neighbors)
+    // Useful for day 3 part 2 but i literally can't think of any other use case lol
+    public static bool HasNeighborsOut<T>(this T[][] map, int x, int y, out (int x,int y)[] neighboorsCoords, params T[] neighbors)
+    {
+        int xStart = x == 0 ? 0 : x - 1;
+        int xEnd = x == map[0].Length - 1 ? x : x + 1;
+        int yStart = y == 0 ? 0 : y - 1;
+        int yEnd = y == map.Length - 1 ? y : y + 1;
+
+        List<(int x, int y)> NeighboorsCoords = new List<(int x, int y)>() {};
+
+        for (int i = xStart; i <= xEnd; i++)
         {
-            int xStart = x == 0 ? 0 : x - 1;
-            int xEnd = x == map[0].Length - 1 ? x : x + 1;
-            int yStart = y == 0 ? 0 : y - 1;
-            int yEnd = y == map.Length - 1 ? y : y + 1;
-
-            List<(int x, int y)> NeighboorsCoords = new List<(int x, int y)>() {};
-
-            for (int i = xStart; i <= xEnd; i++)
+            for (int j = yStart; j <= yEnd; j++)
             {
-                for (int j = yStart; j <= yEnd; j++)
+                if (i == x && j == y) continue;
+                foreach (T neighbor in neighbors)
                 {
-                    if (i == x && j == y) continue;
-                    foreach (T neighbor in neighbors)
+                    if (map[j][i].Equals(neighbor))
                     {
-                        if (map[j][i].Equals(neighbor))
-                        {
-                            NeighboorsCoords.Add((i,j));
-                        }
+                        NeighboorsCoords.Add((i,j));
                     }
                 }
             }
-            neighboorsCoords = NeighboorsCoords.ToArray();
-            if (NeighboorsCoords.Count > 0)
-            {
-                return true;
-            }
-            else return false;
         }
-        public static void InitializeJaggedArray(this Array[] array, int x, int y)
+        neighboorsCoords = NeighboorsCoords.ToArray();
+        if (NeighboorsCoords.Count > 0)
         {
-            array = new Array[y][];
-            for (int i = 0; i < y; i++)
-            {
-                array[i] = new Array[x];
-            }
+            return true;
         }
-        public static void Fill<T>(this List<T> list,int count, Func<int,T> func)
+        else return false;
+    }
+    public static void InitializeJaggedArray(this Array[] array, int x, int y)
+    {
+        array = new Array[y][];
+        for (int i = 0; i < y; i++)
         {
-            for (int i = 0; i < count; i++)
-            {
-                list.Add(func(i));
-            }
+            array[i] = new Array[x];
         }
-        public static void ForEach<TKey,TValue>(this Dictionary<TKey,TValue> dict, Action<KeyValuePair<TKey,TValue>> action)
+    }
+    public static void Fill<T>(this List<T> list,int count, Func<int,T> func)
+    {
+        for (int i = 0; i < count; i++)
         {
-            foreach (var item in dict)
-            {
-                action(item);
-            }
+            list.Add(func(i));
         }
-        public static void RemoveAll<TKey,TValue>(this Dictionary<TKey,TValue> dict, Func<KeyValuePair<TKey,TValue>,bool> func)
+    }
+    public static void ForEach<TKey,TValue>(this Dictionary<TKey,TValue> dict, Action<KeyValuePair<TKey,TValue>> action)
+    {
+        foreach (var item in dict)
         {
-            foreach (var item in dict.Where(func).ToList())
-            {
-                dict.Remove(item.Key);
-            }
+            action(item);
         }
-        public static void Fill<T>(this List<T> list, T value, int count)
+    }
+    public static void RemoveAll<TKey,TValue>(this Dictionary<TKey,TValue> dict, Func<KeyValuePair<TKey,TValue>,bool> func)
+    {
+        foreach (var item in dict.Where(func).ToList())
         {
-            for (int i = 0; i < count; i++)
-            {
-                list.Add(value);
-            }
+            dict.Remove(item.Key);
+        }
+    }
+    public static void Fill<T>(this List<T> list, T value, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            list.Add(value);
         }
     }
 }

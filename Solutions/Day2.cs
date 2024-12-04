@@ -1,4 +1,6 @@
-using Utility;
+using AdventOfCode2024.Utility;
+
+namespace AdventOfCode2024.Solutions;
 
 public class Day2 : ISolution
 {

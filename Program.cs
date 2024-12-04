@@ -1,5 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
+﻿using System.Reflection;
+
+namespace AdventOfCode2024;
 
 public class Program
 {

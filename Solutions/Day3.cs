@@ -1,5 +1,7 @@
+using AdventOfCode2024.Utility;
 using System.Text.RegularExpressions;
-using Utility;
+
+namespace AdventOfCode2024.Solutions;
 
 public class Day3 : ISolution
 {

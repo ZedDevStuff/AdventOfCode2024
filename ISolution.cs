@@ -1,5 +1,7 @@
 using System.Diagnostics;
-using Utility;
+using AdventOfCode2024.Utility;
+
+namespace AdventOfCode2024;
 
 public interface ISolution
 {

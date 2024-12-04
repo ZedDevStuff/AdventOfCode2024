@@ -1,202 +1,201 @@
-namespace Utility
-{
-    public static class Maths
-    {
-        public static bool WithinInclusive(int value, int min, int max)
-        {
-            return value >= min && value <= max;
-        }
-        public static bool WithinExclusive(int value, int min, int max)
-        {
-            return value > min && value < max;
-        }
-    }
-    public static class Fs
-    {
-        public static string GetInput(int day)
-        {
-            try
-            {
-                return File.ReadAllText($"./Data/Day{day}/input.txt");
-            }
-            catch
-            {
-                return "";
-            }
-        }
-        public static string GetTest(int day)
-        {
-            try
-            {
-                return File.ReadAllText($"./Data/Day{day}/test.txt");
-            }
-            catch
-            {
-                return "";
-            }
-        }
+namespace AdventOfCode2024.Utility;
 
-        public static string GetEdgeCases(int day)
+public static class Maths
+{
+    public static bool WithinInclusive(int value, int min, int max)
+    {
+        return value >= min && value <= max;
+    }
+    public static bool WithinExclusive(int value, int min, int max)
+    {
+        return value > min && value < max;
+    }
+}
+public static class Fs
+{
+    public static string GetInput(int day)
+    {
+        try
         {
-            try
-            {
-                return File.ReadAllText($"./Data/Day{day}/edge.txt");
-            }
-            catch
-            {
-                return "";
-            }
+            return File.ReadAllText($"./Data/Day{day}/input.txt");
+        }
+        catch
+        {
+            return "";
         }
     }
-    public static class Quick
+    public static string GetTest(int day)
     {
-        public static IntRange Range(int start, int end)
+        try
         {
-            return new IntRange(start, end);
+            return File.ReadAllText($"./Data/Day{day}/test.txt");
         }
-        public static UIntRange Range(uint start, uint end)
+        catch
         {
-            return new UIntRange(start, end);
-        }
-        public static LongRange Range(long start, long end)
-        {
-            return new LongRange(start, end);
+            return "";
         }
     }
-    public static class ConsoleEx
+
+    public static string GetEdgeCases(int day)
     {
-        public static void WriteColor(object message ,ConsoleColor color)
+        try
+        {
+            return File.ReadAllText($"./Data/Day{day}/edge.txt");
+        }
+        catch
+        {
+            return "";
+        }
+    }
+}
+public static class Quick
+{
+    public static IntRange Range(int start, int end)
+    {
+        return new IntRange(start, end);
+    }
+    public static UIntRange Range(uint start, uint end)
+    {
+        return new UIntRange(start, end);
+    }
+    public static LongRange Range(long start, long end)
+    {
+        return new LongRange(start, end);
+    }
+}
+public static class ConsoleEx
+{
+    public static void WriteColor(object message ,ConsoleColor color)
+    {
+        Console.ForegroundColor = color;
+        Console.Write(message);
+        Console.ForegroundColor = ConsoleColor.White;
+    }
+    public static void WriteColor(params (object message ,ConsoleColor color)[] values)
+    {
+        foreach (var (message, color) in values)
         {
             Console.ForegroundColor = color;
             Console.Write(message);
-            Console.ForegroundColor = ConsoleColor.White;
         }
-        public static void WriteColor(params (object message ,ConsoleColor color)[] values)
-        {
-            foreach (var (message, color) in values)
-            {
-                Console.ForegroundColor = color;
-                Console.Write(message);
-            }
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        public static void WriteLineColor(object message ,ConsoleColor color)
+        Console.ForegroundColor = ConsoleColor.White;
+    }
+    public static void WriteLineColor(object message ,ConsoleColor color)
+    {
+        Console.ForegroundColor = color;
+        Console.WriteLine(message);
+        Console.ForegroundColor = ConsoleColor.White;
+    }
+    public static void WriteLineColor(params (object message ,ConsoleColor color)[] values)
+    {
+        foreach (var (message, color) in values)
         {
             Console.ForegroundColor = color;
-            Console.WriteLine(message);
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(message);
         }
-        public static void WriteLineColor(params (object message ,ConsoleColor color)[] values)
+        Console.Write("\n");
+        Console.ForegroundColor = ConsoleColor.White;
+    }
+}
+public class LongRange : IEnumerable<long>
+{
+    private readonly long _start;
+    private readonly long _end;
+    public long Start => _start;
+    public long End => _end;
+    public long Length => (_end - _start - 1) < 0 ? (_end - _start - 1) * -1 : (_end - _start - 1);
+
+    public LongRange(long start, long end)
+    {
+        _start = start;
+        _end = end;
+        for (long i = start; i <= end; i++)
         {
-            foreach (var (message, color) in values)
-            {
-                Console.ForegroundColor = color;
-                Console.Write(message);
-            }
-            Console.Write("\n");
-            Console.ForegroundColor = ConsoleColor.White;
+            this.Append(i);
         }
     }
-    public class LongRange : IEnumerable<long>
+    public bool Overlaps(LongRange range)
     {
-        private readonly long _start;
-        private readonly long _end;
-        public long Start => _start;
-        public long End => _end;
-        public long Length => (_end - _start - 1) < 0 ? (_end - _start - 1) * -1 : (_end - _start - 1);
-
-        public LongRange(long start, long end)
+        return IsWithin(range.Start) || IsWithin(range.End);
+    }
+    public bool IsWithin(long value)
+    {
+        return value >= _start && value <= _end;
+    }
+    public IEnumerator<long> GetEnumerator()
+    {
+        for (long i = _start; i <= _end; i++)
         {
-            _start = start;
-            _end = end;
-            for (long i = start; i <= end; i++)
-            {
-                this.Append(i);
-            }
+            yield return i;
         }
-        public bool Overlaps(LongRange range)
-        {
-            return IsWithin(range.Start) || IsWithin(range.End);
-        }
-        public bool IsWithin(long value)
-        {
-            return value >= _start && value <= _end;
-        }
-        public IEnumerator<long> GetEnumerator()
-        {
-            for (long i = _start; i <= _end; i++)
-            {
-                yield return i;
-            }
-        }
+    }
         
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-    }
-    public class IntRange : IEnumerable<int>
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
     {
-        private readonly int _start;
-        private readonly int _end;
-        public int Start => _start;
-        public int End => _end;
-        public int Length => (_end - _start) < 0 ? (_end - _start) * -1 : (_end - _start);
-
-        public IntRange(int start, int end)
-        {
-            _start = start;
-            _end = end;
-            for (int i = start; i <= end; i++)
-            {
-                this.Append(i);
-            }
-        }
-
-        public IEnumerator<int> GetEnumerator()
-        {
-            for (int i = _start; i <= _end; i++)
-            {
-                yield return i;
-            }
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
+        return GetEnumerator();
     }
-    public class UIntRange : IEnumerable<uint>
+}
+public class IntRange : IEnumerable<int>
+{
+    private readonly int _start;
+    private readonly int _end;
+    public int Start => _start;
+    public int End => _end;
+    public int Length => (_end - _start) < 0 ? (_end - _start) * -1 : (_end - _start);
+
+    public IntRange(int start, int end)
     {
-        private readonly uint _start;
-        private readonly uint _end;
-        public uint Start => _start;
-        public uint End => _end;
-        public long Length => (_end - _start) < 0 ? (_end - _start) * -1 : (_end - _start);
-
-        public UIntRange(uint start, uint end)
+        _start = start;
+        _end = end;
+        for (int i = start; i <= end; i++)
         {
-            _start = start;
-            _end = end;
-            for (uint i = start; i <= end; i++)
-            {
-                this.Append(i);
-            }
+            this.Append(i);
         }
-
-        public IEnumerator<uint> GetEnumerator()
-        {
-            for (uint i = _start; i <= _end; i++)
-            {
-                yield return i;
-            }
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
     }
+
+    public IEnumerator<int> GetEnumerator()
+    {
+        for (int i = _start; i <= _end; i++)
+        {
+            yield return i;
+        }
+    }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+}
+public class UIntRange : IEnumerable<uint>
+{
+    private readonly uint _start;
+    private readonly uint _end;
+    public uint Start => _start;
+    public uint End => _end;
+    public long Length => (_end - _start) < 0 ? (_end - _start) * -1 : (_end - _start);
+
+    public UIntRange(uint start, uint end)
+    {
+        _start = start;
+        _end = end;
+        for (uint i = start; i <= end; i++)
+        {
+            this.Append(i);
+        }
+    }
+
+    public IEnumerator<uint> GetEnumerator()
+    {
+        for (uint i = _start; i <= _end; i++)
+        {
+            yield return i;
+        }
+    }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
 }
