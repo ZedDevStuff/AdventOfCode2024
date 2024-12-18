@@ -18,6 +18,7 @@ public class Program
                 programs.Add((ISolution)Activator.CreateInstance(type));
             }
         }
+        programs.Sort((a, b) => a.GetType().Name.CompareTo(b.GetType().Name));
 
         while(Running)
         {
